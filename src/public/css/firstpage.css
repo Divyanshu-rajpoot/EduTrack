@@ -65,17 +65,8 @@ html,body{
     justify-content: center;
     gap: 5vh;
 }
-#log button{
-    padding: 10px 10px;
-    color: #fff;
-    border-radius: 10px;
-    background-color: black;
-    border:none;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-#log button:hover{
-    background-color: crimson;
+#log a{
+    text-decoration: none;
     color: black;
-    transition: all ease 0.4s;
+    font-weight: 600;
 }
