@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { infoabout, infologin , infohome } from "../controllers/maincontroller.js";
+import { infoabout, infologin , infohome ,register,error } from "../controllers/maincontroller.js";
 const router = Router();
 router.get("/", infohome);
-// router.get("/about", infoabout);
+router.get("/about", infoabout);
 router.get("/analytics",);
 router.get("/login",infologin );
-
+router.get("/register",register);
+router.get("*" , error);
 export default router;

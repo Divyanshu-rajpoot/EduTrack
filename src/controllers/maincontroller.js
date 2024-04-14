@@ -4,17 +4,25 @@ const infoabout = (req, res) => {
 };
 
 const infologin = (req, res) => {
-    res.render('login');
+    res.render('login',{title: 'Login'});
 };
 
 const infohome = (req, res) => {
     res.render('firstpage', { title: 'Home' });
 }
 
+const register = (req, res) => {
+    res.render('register',{title: 'Register'});
+}
 
+const error = (req, res) => {
+    res.render('error',{title: 'Error', message: `${res.status = 404} Page not found!`});
+}
 
 export{
     infoabout,
     infologin,
-    infohome
+    infohome,
+    register,
+    error
 };
