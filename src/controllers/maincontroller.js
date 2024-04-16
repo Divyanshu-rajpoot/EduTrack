@@ -19,10 +19,15 @@ const error = (req, res) => {
     res.render('error',{title: 'Error', message: `${res.status = 404} Page not found!`});
 }
 
+const analytics = (req, res) => {
+    res.render('analytics');
+}
+
 export{
     infoabout,
     infologin,
     infohome,
     register,
-    error
+    error,
+    analytics
 };

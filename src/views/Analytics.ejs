@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Pie Chart</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div id="pie-chart"></div>
+
+  <script>
+    // Fetch sales data from backend API
+    fetch('/sales')
+      .then(response => response.json())
+      .then(data => {
+        // Process the fetched data
+        const salesData = data;
+
+        // Aggregate sales by topics
+        const salesByTopic = {};
+        salesData.forEach(sale => {
+          sale.topics.forEach(topic => {
+            if (!salesByTopic[topic]) {
+              salesByTopic[topic] = 0;
+            }
+            salesByTopic[topic] += sale.sales;
+          });
+        });
+
+        // Convert salesByTopic object to an array of objects for D3 pie layout
+        const pieData = Object.entries(salesByTopic).map(([topic, sales]) => ({ topic, sales }));
+
+        // Set up SVG dimensions
+        const width = 500;
+        const height = 500;
+        const radius = Math.min(width, height) / 2;
+
+        // Create SVG element
+        const svg = d3.select("#pie-chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", `translate(${width / 2},${height / 2})`);
+
+        // Define pie layout
+        const pie = d3.pie()
+          .value(d => d.sales);
+
+        // Generate pie slices
+        const arc = d3.arc()
+          .innerRadius(0)
+          .outerRadius(radius)
+          
+
+        // Append slices to the pie chart
+        const slices = svg.selectAll("path")
+          .data(pie(pieData))
+          .enter()
+          .append("path")
+          .attr("d", arc)
+          .attr("fill", (d, i) => d3.schemeCategory10[i])
+          .transition()
+
+        slices.append("title")
+          .text(d => `${d.data.topic}: ${d.data.sales}`);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  </script>
+</body>
+</html>
