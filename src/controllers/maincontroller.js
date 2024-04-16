@@ -20,7 +20,7 @@ const error = (req, res) => {
 }
 
 const analytics = (req, res) => {
-    res.render('analytics');
+    res.render('analytics' , {title: 'Analytics'});
 }
 
 export{
