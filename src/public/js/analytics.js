@@ -1,37 +1,41 @@
 const topicbtn = document.getElementById("topicwise");
 const continentsales = document.getElementById("continentsales");
 const coursesbtn = document.getElementById("coursessales");
-const totalsales = document.getElementById("totalsales");
+const totalproduct = document.getElementById("totalsales");
 const panel = document.getElementById("pie-chart");
 const totalreveneu = document.getElementById("total");
 const totaltopical = document.getElementById("totaltopic");
 const totalcourse = document.getElementById("totalcource");
+const futureval = document.getElementById("ans");
 topicbtn.addEventListener('click', topicwisesales);
 coursesbtn.addEventListener('click', coursessales);
+totalproduct.addEventListener('click', totalans);
+continentsales.addEventListener('click', continent);
 
+let salesvalue = 0;
 function coursessales() {
   fetch('/courses')
     .then(response => response.json())
     .then(courses => {
       const totalsalesvalues = courses.reduce((acc, course) => acc + course.sales, 0);
       const totalprice = courses.reduce((acc, course) => acc + course.price, 0);
-      
 
-      totalreveneu.innerText = `$${totalsalesvalues*totalprice}`
+      salesvalue = totalsalesvalues;
+      totalreveneu.innerText = `$${totalsalesvalues * totalprice}`
 
       // Aggregate sales data for each course
       const coursedata = courses.map(course => ({
         course: course.name,
         sales: course.sales
       }));
-      
+
       //removing the double data that is produced
       const uniquecoursedata = Array.from(new Set(coursedata.map(a => a.course)))
         .map(course => {                                   //this will return the data of the uniwue values only
           return coursedata.find(a => a.course === course)
         });
 
-        totalcourse.innerText = `${uniquecoursedata.length}`
+      totalcourse.innerText = `${uniquecoursedata.length}`
       // Set up SVG dimensions
       const width = 400;
       const height = 400;
@@ -178,3 +182,82 @@ function topicwisesales() {
     })
 }
 
+function totalans() {
+  panel.innerHTML = "";
+  totalreveneu.style.fontSize = "30px";
+  futureval.innerText = `$${salesvalue}`
+}
+
+function continent() {
+  // Fetch data from /courses route
+  fetch('/courses')
+    .then(response => response.json())
+    .then(data => {
+      // Process data to calculate total sales for each continent
+      const salesByContinent = data.reduce((acc, course) => {
+        acc[course.continent] = (acc[course.continent] || 0) + course.sales;
+        return acc;
+      }, {});
+
+      // Convert salesByContinent object to array
+      const salesData = Object.keys(salesByContinent).map(continent => ({
+        continent,
+        sales: salesByContinent[continent]
+      }));
+      console.log(salesData);
+      const width = 500;
+      const height = 500;
+      const radius = Math.min(width, height) / 2;
+
+      let svg = d3.select("#pie-chart").select("svg");
+      if (!svg.empty()) {
+        svg = svg.remove();
+        svg = d3.select("#pie-chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", `translate(${width / 2},${height / 2})`);
+      }
+      else if (svg.empty()) {
+        svg = d3.select("#pie-chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", `translate(${width / 2},${height / 2})`);
+      }
+      const pie = d3.pie()
+        .value(d => d.sales)
+        .padAngle(0.007)
+        .startAngle(0)
+        .endAngle(2 * Math.PI);
+
+      const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+      const slices = svg.selectAll("path")
+        .data(pie(salesData))
+        .enter()
+        .append("path")
+        .attr("d", arc)
+        .attr("fill", (d, i) => d3.schemeCategory10[i]);
+
+      const text = svg.selectAll("text")
+        .data(pie(salesData))
+        .enter()
+        .append("text")
+        .attr("transform", function (d) {
+          const angle = (d.startAngle + d.endAngle) / 2 * 180 / Math.PI - 90;
+          return `translate(${arc.centroid(d)}) rotate(${angle})`;
+        })
+        .attr("dy", ".20em")
+        .text(function (d) { return d.data.continent; })
+        .style("text-anchor", "middle") // Center the text
+        .style("font-size", "13px") // Set the font size
+        .style("fill", "white"); // Set the text color
+      slices.append("title")
+        .text(d => `${d.data.continent}: ${d.data.sales}`);
+    })
+}
