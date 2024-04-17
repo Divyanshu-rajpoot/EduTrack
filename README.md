@@ -1,7 +1,7 @@
 # EduTrack
 
 ## Introduction
-Welcome to Coding Blocks-EduTrack! This project is a data visualization tool designed to track the sales performance of an organization offering classroom and online courses across different continents and topics. It provides interactive pie charts to visualize sales data by country, continent, and course topic, along with detailed information about enrolled students for each course.
+Welcome to EduTrack! This project is a data visualization tool designed to track the sales performance of an organization offering classroom and online courses across different continents and topics. It provides interactive pie charts to visualize sales data by country, continent, and course topic, along with detailed information about enrolled students for each course.
 
 ## Project Overview
 EduTrack aims to address the need for organizations to efficiently track and analyze their course sales data. By visualizing sales performance across various dimensions such as continent and course topic, it enables stakeholders to make informed decisions and optimize their strategies accordingly.
