@@ -15,14 +15,12 @@ EduTrack is developed using the following technologies:
 - Front-end: HTML, CSS, JavaScript, D3.js
 - Back-end: Node.js, Express.js
 - Database: MongoDB
-- Other tools and libraries: [list any additional technologies here]
 
 Each technology was carefully chosen for its suitability to the project's requirements and its ability to deliver a robust and efficient solution.
 
 ## Features
 - Visualize sales data by country, continent, and course topic using interactive pie charts.
 - Explore detailed information about enrolled students for each course.
-- [List any additional features here]
 
 ## User Interface
 The user interface of EduTrack is designed for ease of use and intuitive navigation. Screenshots or wireframes are provided to demonstrate the design choices and usability considerations incorporated into the interface.
